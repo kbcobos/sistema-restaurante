@@ -1,3 +1,5 @@
+from admin import login_admin_menu
+
 def mostrar_banner():
     print("=" * 70)
     print(" " * 20 + "RESTAURANTE PIZZA ESPACIAL" + 20 * " ")
