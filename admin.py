@@ -1,5 +1,8 @@
 import json
 import os
+from datetime import datetime
+from utilidades import limpiar_pantalla, pausar, mostrar_tabla_productos
+import validacion
 
 admins = {}
 menu_productos = []
@@ -100,11 +103,79 @@ def registrar_admin(usuario, contrasena, mail, nombre, apellido):
     except Exception as e:
         print(f"Error: {e}")
         return False
+    
+def login_admin(usuario, contrasena):
+    from validacion import validar_admin_y_contrasena
+
+    resultado = validar_admin_y_contrasena(usuario, contrasena)
+
+    if resultado is None:
+        print("Usuario o contraseña incorrectos")
+        return False
+    
+    print(f"¡Bienvenido {resultado['Nombre']}!")
+    return True
+
+def menu_gestion_menu():
+    while True:
+        limpiar_pantalla()
+        print("=" * 60)
+        print("GESTION DE MENU")
+        print("=" * 60)
+        print("\n1. Ver menú completo")
+        print("2. Agregar producto")
+        print("3. Modificar producto")
+        print("4. Eliminar producto")
+        print("0. Volver")
+        print("-" * 60)
+
+        opcion = input("\n Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            ver_menu_admin()
+
+        elif opcion == "2":
+            agregar_producto()
+        
+        elif opcion == "3":
+            modificar_producto()
+
+        elif opcion == "4":
+            eliminar_producto()
+            break
+
+        else:
+            print("Opcion invalida")
+            pausar()
+    
+def ver_menu_admin():
+    limpiar_pantalla()
+    print("=" * 60)
+    print("MENU COMPLETO (ADMIN)")
+    print("=" * 60)
+
+    if not menu_productos:
+        print("\n No hay productos en el menú.")
+        pausar()
+        return
+    
+    print(f"\n{'#':<4} {'ID':<8} {'Producto':<20} {'Categoria':<12} {'Precio':<10} {'Disponible'}")
+    print("-" * 60)
+
+    for i, producto in enumerate(menu_productos, 1):
+        disponible = "OK" if producto.get('disponible', True) else "NOT OK"
+        print(f"{i:<4} {producto['id']:<8} {producto['nombre']:<20} {producto['categoria']:<12} ${producto['precio']:<9.2f} {disponible}")
+
+        print("-" * 60)
+        print(f"Total de productos: {len(menu_productos)}")
+
+        pausar()
 
 def login_admin_menu():
     cargar_datos()
 
     while True:
+        limpiar_pantalla()
         print("=" * 60)
         print("ACCESO ADMINISTRADOR")
         print("=" * 60)
@@ -125,9 +196,11 @@ def login_admin_menu():
 
             if clave != "admin123":
                 print("Clave incorrecta")
+                pausar()
                 continue
 
             print("Funcionalidad pendiente de implementar completamente")
+            pausar()
 
         elif opcion == "2":
             print("\n INICIO DE SESION")
@@ -143,6 +216,7 @@ def login_admin_menu():
                 contrasena = input("Contraseña: ").strip()
 
                 if login_admin_menu(usuario, contrasena):
+                    pausar()
                     bandera = False
                 else:
                     print("\n Credenciales incorrectas")
@@ -158,4 +232,4 @@ def login_admin_menu():
 
         else:
             print("Opcion invalida")
-                
+            pausar()
