@@ -69,3 +69,113 @@ def registrar_usuario(nombre, mail, contrasena):
     except Exception as e:
         print(f"Error al registrar: {e}")
         return False
+    
+def login_usuario_menu():
+    cargar_usuarios()
+
+    while True:
+        limpiar_pantalla()
+        print("=" * 60)
+        print("ACCESO USUARIO")
+        print("=" * 60)
+        print("\n1. Registrar nuevo usuario")
+        print("2. Iniciar sesión")
+        print("0. Volver al menú principal")
+        print("-" * 60)
+
+        opcion = input("\n Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            print("\n REGISTRO DE USUARIO")
+            print("-" * 60)
+
+            bandera = True
+            nombre = None
+            while bandera:
+                nombre_input = input("Nombre (-1 para cancelar): ").strip()
+                if nombre_input == "-1":
+                    break
+
+                if not validacion.validar_solo_letras(nombre_input):
+                    print("ERROR: El nombre solo puede contener letras.")
+                    continue
+
+                nombre = nombre_input
+                bandera = False
+
+            if nombre is None:
+                continue
+
+            bandera = True
+            mail = None
+            while bandera:
+                mail_input = input("Emil (-1 para cancelar): ").strip().lower()
+                if mail_input == "-1":
+                    break
+
+                if not validacion.validar_mail(mail_input):
+                    print("ERROR: El mail debe tener un dominio valido.")
+                    continue
+
+                if mail_input in usuarios:
+                    print("ERROR: El mail ya está registrado.")
+                    continue
+
+                mail = mail_input
+                bandera = False
+
+            if mail is None:
+                continue
+
+            bandera = True
+            contrasena = None
+            while bandera:
+                contrasena_input = input("Contraseña (-1 para cancelar): ").strip()
+                if contrasena_input == "-1":
+                    break
+
+                if not validacion.validar_contrasena(contrasena_input):
+                    print("ERROR: La contraseña debe tener al menos 5 caracteres.")
+                    continue
+
+                contrasena = contrasena_input
+                bandera = False
+
+            if contrasena is None:
+                continue
+
+            if registrar_usuario(nombre, mail, contrasena):
+                pausar()
+        
+        elif opcion == "2":
+            print("\n INICIO DE SESIÓN")
+            print("-" * 60)
+
+            bandera = True
+            while bandera:
+                usuario = input("Email (-1 para cancelar): ").strip().lower()
+                if usuario == "-1":
+                    bandera = False
+                    continue
+
+                contrasena = input("Contraseña: ").strip()
+
+                if login_usuario(usuario, contrasena):
+                    pausar()
+                    menu_usuario(usuario)
+                    bandera = False
+                else:
+                    print("\n Credenciales incorrectos.")
+                    print("Opciones:")
+                    print("1. Reintentar")
+                    print("-1. Volver")
+                    opcion_error = input("Seleccione: ").strip()
+                    if opcion_error == "-1":
+                        bandera = False
+        
+        elif opcion == "0":
+            break
+
+        else:
+            print("Opción inválida.")
+            pausar()
