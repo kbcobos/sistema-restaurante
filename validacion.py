@@ -60,3 +60,53 @@ def validar_datos_no_nulos(datos):
                 return False
     
     return True
+
+def validar_numero_positivo(valor):
+    try:
+        numero = float(valor.strip())
+        if numero <= 0:
+            return None
+        return numero
+    except (ValueError, AttributeError):
+        return None
+    
+def validar_mesa(mesa):
+    try:
+        numero_mesa = int(mesa)
+        if numero_mesa <= 0:
+            return None
+        return numero_mesa
+    except (ValueError, TypeError):
+        return None
+    
+def validar_usuario_y_contrasena(usuario, contrasena):
+    try:
+        usuario = usuario.strip().lower() if usuario else ""
+        contrasena = contrasena.strip() if contrasena else ""
+
+        if not usuario or not contrasena:
+            return None
+        
+        with open(ruta_usuarios, "r", enconding="utf-8") as archivo:
+            usuarios = json.load(archivo)
+
+        usuairo_encontrado = None
+        for usuario_key in usuarios.keys():
+            usuairo_encontrado = usuario_key
+            break
+
+        if usuairo_encontrado is None:
+            return None
+        
+        contrasena_guardada = usuarios[usuairo_encontrado].get("contraseña")
+
+        if contrasena_guardada == contrasena:
+            return usuarios[usuairo_encontrado]
+        
+        return None
+    
+    except FileExistsError:
+        return None
+    except Exception as e:
+        print(f"ERROR: {e}")
+        return None
