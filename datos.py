@@ -154,3 +154,78 @@ def guardar_menu(menu):
     except Exception as e:
         print(f"Error al guardar menú: {e}")
         return False
+    
+def cargar_pedidos():
+    try:
+        with open(ARCHIVO_PEDIDOS, 'r', encoding='utf-8') as archivo:
+            return json.load(archivo)
+    except FileNotFoundError:
+        return []
+    except json.JSONDecodeError:
+        print("ERROR: Error al leer el archivo de pedidos")
+        return []
+    except Exception as e:
+        print(f"Error al cargar pedidos: {e}")
+        return []
+    
+def guardar_pedidos(pedidos):
+    try:
+        with open(ARCHIVO_PEDIDOS, 'w', encoding='utf-8') as archivo:
+            json.dump(pedidos, archivo, indent=4, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(f"Error al guardar pedidos: {e}")
+        return False
+    
+def guardar_pedido(pedido):
+    try:
+        pedidos = cargar_pedidos()
+        pedidos.append(pedido)
+        return guardar_pedidos(pedidos)
+    except Exception as e:
+        print(f"Error al guardar pedido: {e}")
+        return False
+
+def cargar_usuarios():
+    try:
+        with open(ARCHIVO_USUARIOS, 'r', encoding='utf-8') as archivo:
+            return json.load(archivo)
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError:
+        print("ERROR: Error al leer el archivo de usuarios")
+        return {}
+    except Exception as e:
+        print(f"Error al cargar usuarios: {e}")
+        return {}
+    
+def guardar_usuarios(usuarios):
+    try:
+        with open(ARCHIVO_USUARIOS, 'w', encoding='utf-8') as archivo:
+            json.dump(usuarios, archivo, indent=4, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(f"Error al guardar usuarios: {e}")
+        return False
+
+def cargar_admins():
+    try:
+        with open(ARCHIVO_ADMINS, 'r', encoding='utf-8') as archivo:
+            return json.load(archivo)
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError:
+        print("ERROR: Error al leer el archivo de administradores")
+        return {}
+    except Exception as e:
+        print(f"Error al cargar administradores: {e}")
+        return {}
+
+def guardar_admins(admins):
+    try:
+        with open(ARCHIVO_ADMINS, 'w', encoding='utf-8') as archivo:
+            json.dump(admins, archivo, indent=4, ensure_ascii=False)
+        return True
+    except Exception as e:
+        print(f"Error al guardar administradores: {e}")
+        return False
