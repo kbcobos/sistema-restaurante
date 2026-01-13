@@ -69,7 +69,55 @@ def registrar_usuario(nombre, mail, contrasena):
     except Exception as e:
         print(f"Error al registrar: {e}")
         return False
+
+def login_usuario():
+    from validacion import validar_usuario_y_contrasena
+
+    resultado = validar_usuario_y_contrasena(usuario, contrasena)
+
+    if resultado is None:
+        print("Usuario o contraseña incorrectos.")
+        return False
     
+    print(f"¡Bienvenido {resultado['nombre']}!")
+    return True
+
+def menu_usuario(usuario_actual):
+    cargar_usuarios()
+
+    while True:
+        limpiar_pantalla()
+        print("=" * 60)
+        print(f"BIENVENIDO: {usuarios.get(usuario_actual, {}).get('nombre', usuario_actual)}")
+        print("=" * 60)
+        print("\n MENÚ DE OPCIONES")
+        print("-" * 60)
+        print("1. Ver menú completo")
+        print("2. Hacer pedido")
+        print("3. Ver mis pedidos")
+        print("0. Cerrar sesión")
+        print("-" * 60)
+
+        opcion = input("\n Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            ver_menu_completo()
+        
+        elif opcion == "2":
+            hacer_pedido(usuario_actual)
+
+        elif opcion == "3":
+            ver_mis_pedidos(usuario_actual)
+
+        elif opcion == "0":
+            print("\n ¡Hasta luego!")
+            pausar()
+            break
+
+        else:
+            print("Opción invalida.")
+            pausar()
+
 def login_usuario_menu():
     cargar_usuarios()
 
