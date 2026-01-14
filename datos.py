@@ -229,3 +229,44 @@ def guardar_admins(admins):
     except Exception as e:
         print(f"Error al guardar administradores: {e}")
         return False
+
+def generar_ticket_txt(pedido):
+    try:
+        nombre_archivo = f"{CARPETA_TICKETS}/ticket_{pedido['id']}.txt"
+
+        with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
+            archivo.write("=" * 60 + "\n")
+            archivo.write(f"    RESTAURANTE {NOMBRE_RESTAURANTE}\n")
+            archivo.write("=" * 60 + "\n\n")
+
+            archivo.write(f"TICKET DE PEDIDO\n")
+            archivo.write(f"Numero: {pedido['id']}\n")
+            archivo.write(f"Fecha: {pedido['fecha']}\n")
+            archivo.write(f"-" * 60 + "\n\n")
+
+            archivo.write(f"Cliente: {pedido['nombre']}\n")
+            archivo.write(f"Mesa: {pedido['mesa']}\n")
+            archivo.write(f"Estado: {pedido['estado']}\n")
+            archivo.write(f"-" * 60 + "\n\n")
+
+            archivo.write(f"DETALLE DEL PEDIDO\n")
+            archivo.write(f"-" * 60 + "\n")
+            archivo.write(f"{'Producto':<30} {'Cant':<6} {'Precio':<10} {'Subtotal'}\n")
+            archivo.write(f"-" * 60 + "\n")
+
+            for item in pedido['productos']:
+                archivo.write(f"{item['nombre']:<30} {item['cantidad']:6} ${item['pedido']:<9.2f} ${item['subtotal']:.2f}\n")
+
+            archivo.write("-" * 60 + "\n")
+            archivo.write(f"{'TOTAL:':<46} ${pedido['total']:.2f}\n")
+            archivo.write("=" * 60 + "\n\n")
+
+            archivo.write("Gracias por su compra!\n")
+            archivo.write("Esperamos verlo pronto nuevamente.\n")
+            archivo.write("=" * 60 + "\n")
+
+        return True
+    
+    except Exception as e:
+        print(f"Error al generar ticket: {e}")
+        return False
