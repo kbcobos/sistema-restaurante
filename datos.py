@@ -270,3 +270,112 @@ def generar_ticket_txt(pedido):
     except Exception as e:
         print(f"Error al generar ticket: {e}")
         return False
+    
+def exportar_reporte_txt():
+    try:
+        pedidos = cargar_pedidos()
+        menu = cargar_menu()
+
+        fecha_actual = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        nombre_archivo = f"{CARPETA_REPORTES}/reporte_ventas_{fecha_actual}.txt"
+
+        with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
+            archivo.write("=" * 80 + "\n")
+            archivo.write(f"REPORTE DE VENTAS - RESTAURANTE {NOMBRE_RESTAURANTE}\n")
+            archivo.write("=" * 80 + "\n\n")
+
+            archivo.write("MENU ACTUAL\n")
+            archivo.write("-" * 80 + "\n")
+            archivo.write(f"Total de productos: {len(menu)}\n\n")
+
+            categorias = {}
+            for producto in menu:
+                cat = producto.get('categoria', 'Sin categoria')
+                if cat not in categorias:
+                    categorias[cat] = []
+                categorias[cat].append(producto)
+
+            for categoria, productos in categorias.items():
+                archivo.write(f"\n{categoria.upper()}\n")
+                for producto in productos:
+                    disponible = "SI" if producto.get('disponible', True) else "NO"
+                    archivo.write(f"    - {producto['nombre']} - ${producto['precio']:.2f} Disponible: {disponible}\n")
+            
+            archivo.write("\n" + "=" * 80 + "\n\n")
+
+            archivo.write("HISTORIAL DE PEDIDOS\n")
+            archivo.write("-" * 80 + "\n")
+            archivo.write(f"Total de pedidos: {len(pedidos)}\n\n")
+
+            if pedidos:
+                total_ventas = sum(p['total'] for p in pedidos)
+                promedio_venta = total_ventas / len(pedidos)
+
+                archivo.write(f"RESUMEN FINANCIERO\n")
+                archivo.write(f"    Total de ventas: ${total_ventas:.2f}\n")
+                archivo.write(f"    Promedio por pedido: ${promedio_venta:.2f}\n\n")
+
+                archivo.write(f"PEDIDOS POR ESTADO\n")
+                estados = {}
+                for pedido in pedidos:
+                    estado = pedido['estado']
+                    estados[estado] = estados.get(estado, 0) + 1
+
+                for estado, cantidad in estados.items():
+                    archivo.write(f"    {estado}: {cantidad} pedidos\n")
+
+                archivo.write("\n")
+
+                archivo.write(f"PRODUCTOS MAS VENDIDOS\n")
+                productos_vendidos = {}
+                ingresos_por_producto = {}
+
+                for pedido in pedidos:
+                    for item in pedido['productos']:
+                        nombre = item['nombre']
+                        cantidad = item['cantidad']
+                        subtotal = item['subtotal']
+
+                        if nombre in productos_vendidos:
+                            productos_vendidos[nombre] += cantidad
+                            ingresos_por_producto[nombre] += subtotal
+                        else:
+                            productos_vendidos[nombre] = cantidad
+                            ingresos_por_producto[nombre] = subtotal
+                
+                top_productos = sorted(productos_vendidos.items(), key=lambda x: x[1], reverse=True)[:10]
+
+                for i, (producto, cantidad) in enumerate(top_productos, 1):
+                    ingreso = ingresos_por_producto[producto]
+                    archivo.write(f"    {i}. {producto} - {cantidad} unidades (${ingreso:.2f})\n")
+
+                archivo.write("\n" + "-" * 80 + "\n\n")
+
+                archivo.write(f"DETALLE DE TODOS LOS PEDIDOS\n")
+                archivo.write("-" * 80 + "\n\n")
+
+                for i, pedido in enumerate(pedidos, 1):
+                    archivo.write(f"Pedido #{i} - ID: {pedido['id']}\n")
+                    archivo.write(f"    Cliente: {pedido['nombre']} | Mesa: {pedido['mesa']}\n")
+                    archivo.write(f"    Fecha: {pedido['fecha']}\n")
+                    archivo.write(f"    Estado: {pedido['estado']}\n")
+                    archivo.write(f"    Total: {pedido['total']:.2f}\n")
+                    archivo.write(f"    Productos:\n")
+                    for item in pedido['productos']:
+                        archivo.write(f"    - {item['nombre']} x{item['cantidad']} (${item['subtotal']:.2f})\n")
+                    archivo.write("\n")
+                
+                archivo.write("=" * 80 + "\n")
+                archivo.write("Fin del reporte\n")
+                archivo.write("=" * 80 + "\n")
+
+            nombre_fijo = f"{CARPETA_REPORTES}/reporte_ventas.txt"
+            with open(nombre_archivo, 'r', encoding='utf-8') as origen:
+                with open(nombre_fijo, 'w', encoding='utf-8') as destino:
+                    destino.write(origen.read())
+
+            return True
+        
+    except Exception as e:
+        print(f"Error al exportar reporte: {e}")
+        return False
