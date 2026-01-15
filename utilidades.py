@@ -109,9 +109,9 @@ def validar_string_no_vacio(mensaje):
     
 def mostrar_barra_progreso(actual, total, longitud=40):
     try:
-        porcentaje = int((actual/total) * 100)
-        lleno = int((longitud*actual)/total)
-        barra = '█' * lleno + '-' * (longitud-lleno)
+        porcentaje = int((actual / total) * 100)
+        lleno = int((longitud * actual)/total)
+        barra = '#' * lleno + '-' * (longitud - lleno)
         print(f'\r|{barra}| {porcentaje}%', end='')
 
         if actual >= total:
