@@ -33,7 +33,7 @@ def cargar_datos():
             pedidos = []
         
         print("Datos cargados correctamente")
-        return False
+        return True
     
     except Exception as e:
         print(f"Error al cargar datos: {e}")
@@ -61,6 +61,7 @@ def guardar_datos():
         return False
     
 def registrar_admin(usuario, contrasena, mail, nombre, apellido):
+    from validacion import validar_mail, validar_contrasena, validar_solo_letras, validar_datos_no_nulos
 
     datos = [usuario, contrasena, mail, nombre, apellido]
     if not validar_datos_no_nulos(datos):
@@ -82,7 +83,7 @@ def registrar_admin(usuario, contrasena, mail, nombre, apellido):
     usuario = usuario.strip().lower()
 
     if usuario in admins:
-        print(f"El administrador '{usuario}' ya existe")
+        print(f"ERROR: El administrador '{usuario}' ya existe.")
         return False
     
     try:
@@ -163,13 +164,92 @@ def ver_menu_admin():
     print("-" * 60)
 
     for i, producto in enumerate(menu_productos, 1):
-        disponible = "OK" if producto.get('disponible', True) else "NOT OK"
+        disponible = "SI" if producto.get('disponible', True) else "NOT OK"
         print(f"{i:<4} {producto['id']:<8} {producto['nombre']:<20} {producto['categoria']:<12} ${producto['precio']:<9.2f} {disponible}")
 
         print("-" * 60)
         print(f"Total de productos: {len(menu_productos)}")
 
         pausar()
+
+def agregar_producto():
+    limpiar_pantalla()
+    print("=" * 60)
+    print("AGREGAR PRODUCTO")
+    print("=" * 60)
+
+    bandera = True
+    nombre = None
+    while bandera:
+        nombre_input = input("\nNombre del producto (-1 para cancelar): ").strip()
+        if nombre_input == "-1":
+            print("Operacion cancelada.")
+            pausar()
+            return
+        
+        if not validacion.validar_nombre_producto(nombre_input):
+            print("ERROR: El nombre debe tener al menos 2 caracteres.")
+            continue
+
+        nombre = nombre_input
+        bandera = False
+
+    print("\nCategorias disponibles: Entrada, Principal, Postre, Bebida")
+    bandera = True
+    categoria = None
+    while bandera:
+        categoria_input = input("Categoria (-1 para cancelar): ").strip()
+        if categoria_input == "-1":
+            print("Operacion cancelada.")
+            pausar()
+            return
+        
+        if not validacion.validar_categoria(categoria_input):
+            print("ERROR: Categoria invalida.")
+            continue
+
+        categoria = categoria_input.title()
+        bandera = False
+
+    bandera = True
+    precio = None
+    while bandera:
+        precio_input = input("Precio ($) (-1 para cancelar): ").strip()
+        if precio_input == "-1":
+            print("Operacion cancelada.")
+            pausar()
+            return
+        
+        precio = validacion.validar_precio(precio_input)
+        if precio is None:
+            print("ERROR: El precio debe ser un numero positivo.")
+            continue
+
+        bandera = False
+    
+    descripcion = input("Descripcion (opcion, Enter para omitir): ").strip()
+
+    try:
+        nuevo_id = f"PROD{len(menu_productos) + 1:03d}"
+
+        numero_producto = {
+            'id': nuevo_id,
+            'nombre': nombre,
+            'precio': precio,
+            'descripcion': descripcion,
+            'disponible': True
+        }
+
+        menu_productos.append(nuevo_producto)
+        guardar_datos()
+
+        print("f\nProducto '{nombre}' agregado exitosamente.")
+        print(f"ID asignado: {nuevo_id}")
+    
+    except Exception as e:
+        print(f"Error: {e}")
+
+    pausar()
 
 def login_admin_menu():
     cargar_datos()
