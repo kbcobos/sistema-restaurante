@@ -23,6 +23,8 @@ def validar_mail(mail):
     if not nombre or dominio not in dominios:
         return False
     
+    return True
+    
 def validar_contrasena(contrasena):
 
     caracteres_minimos = 5
@@ -92,8 +94,9 @@ def validar_usuario_y_contrasena(usuario, contrasena):
 
         usuairo_encontrado = None
         for usuario_key in usuarios.keys():
-            usuairo_encontrado = usuario_key
-            break
+            if usuario_key.lower() == usuario:
+                usuairo_encontrado = usuario_key
+                break
 
         if usuairo_encontrado is None:
             return None
@@ -110,3 +113,76 @@ def validar_usuario_y_contrasena(usuario, contrasena):
     except Exception as e:
         print(f"ERROR: {e}")
         return None
+    
+def validar_admin_y_contrasena(usuario, contrasena):
+    try:
+        usuario = usuario.strip().lower() if usuario else ""
+        contrasena = contrsena.strip() if contrasena else ""
+
+        if not usuario or not contrasena:
+            return None
+        
+        with open(ruta_admins, "r", encoding="utf-8") as archivo:
+            admins = json.load(archivo)
+
+        usuario_encontrado = None
+        for usuario_key in admins.keys():
+            if usuario_key.lower() == usuario:
+                usuario_encontrado = usuario_key
+                break
+        
+        if usuario_encontrado is None:
+            return None
+        
+        contrasena_guardada = admins[usuario_encontrado].get("Contraseña")
+
+        if contrasena_guardada == contrasena:
+            return admins[usuario_encontrado]
+        
+        return None
+    
+    except FileNotFoundError:
+        return None
+    except Exception as e:
+        print(f"ERROR: {e}")
+        return None
+
+def validar_producto_existente(producto_id, menu_dict=None):
+    try:
+        if menu_dict is not None:
+            menu = menu_dict
+        else:
+            with open(ruta_menu, "r", encoding="utf-8") as archivo:
+                menu = json.load(archivo)
+        
+        for item in menu:
+            if item.get("id") == producto_id:
+                return True
+        
+        return False
+    
+    except FileNotFoundError:
+        return False
+    except Exception as e:
+        print(f"ERROR: {e}")
+        return False
+    
+def validar_pedido_existente(pedido_id, pedidos_dict=None):
+    try:
+        if pedidos_dict is not None:
+            pedidos = pedidos_dict
+        else:
+            with open(ruta_pedidos, "r", encoding="utf-8") as archivo:
+                pedidos = json.load(archivo)
+
+            for pedido in pedidos:
+                if pedido.get("id") == pedido_id:
+                    return True
+            
+            return False
+        
+    except FileNotFoundError:
+        return False
+    except Exception as e:
+        print(f"ERROR: {e}")
+        return False
