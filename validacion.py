@@ -186,3 +186,53 @@ def validar_pedido_existente(pedido_id, pedidos_dict=None):
     except Exception as e:
         print(f"ERROR: {e}")
         return False
+    
+def validar_usuario_registrado(usuario):
+    try:
+        usuario_normalizado = usuario.strip().lower() if usuario else ""
+
+        with open(ruta_usuarios, "r", encoding="utf-8") as archivo:
+            usuarios = json.load(archivo)
+
+        for usuario_key in usuarios.keys():
+            if usuario_key.lower() == usuario_normalizado:
+                return True
+        
+        return False
+    
+    except FileNotFoundError:
+        return False
+    except Exception as e:
+        print(f"ERROR: {e}")
+        return False
+    
+def confirmar_accion(accion):
+    print(f"Confirma que desea {accion}? (S/N): ", end="")
+    respuesta = input().strip().upper()
+
+    while respuesta not in ("S", "N"):
+        print("Respuesta invalida. Ingrese 'S' para Si o 'N' para No.")
+        print("Confirma? (S/N): ", end="")
+        respuesta = input().strip().upper()
+    
+    return respuesta == "S"
+
+def validar_categoria(categoria):
+    categoria_validas = ["entrada", "principal", "postre", "bebida"]
+
+    if not categoria:
+        return False
+    
+    return categoria.strip().lower() in categorias_validas
+
+def validar_estado_pedido(estado):
+
+    estados_validos = ["pendiente", "en preparación", "listo", "entregado", "cancelado"]
+
+    if not estado:
+        return False
+    
+    return estado.strip().lower() in estados_validos
+
+def manejar_entrada_invalida(entrada):
+    print(f"ERROR: Entrada invalida: '{entrada}'. Por favor, intentelo nuevamente")
