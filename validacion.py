@@ -117,7 +117,7 @@ def validar_usuario_y_contrasena(usuario, contrasena):
 def validar_admin_y_contrasena(usuario, contrasena):
     try:
         usuario = usuario.strip().lower() if usuario else ""
-        contrasena = contrsena.strip() if contrasena else ""
+        contrasena = contrasena.strip() if contrasena else ""
 
         if not usuario or not contrasena:
             return None
@@ -218,7 +218,8 @@ def confirmar_accion(accion):
     return respuesta == "S"
 
 def validar_categoria(categoria):
-    categoria_validas = ["entrada", "principal", "postre", "bebida"]
+
+    categorias_validas = ["entrada", "principal", "postre", "bebida"]
 
     if not categoria:
         return False
@@ -236,3 +237,40 @@ def validar_estado_pedido(estado):
 
 def manejar_entrada_invalida(entrada):
     print(f"ERROR: Entrada invalida: '{entrada}'. Por favor, intentelo nuevamente")
+
+def verificar_usuario_registrado(usuario):
+    return validar_usuario_registrado(usuario)
+
+def validar_nombre_producto(nombre):
+    if not nombre or not nombre.strio():
+        return False
+    
+    nombre_limpio = nombre.strip()
+
+    if len(nombre_limpio) < 2:
+        return False
+    
+    caracteres_validos = sum(1 for c in nombre_limpio if c.isalnum())
+
+    if caracteres_validos == 0:
+        return False
+    
+    return True
+
+def validar_precio(precio):
+    try:
+        precio_float = float(precio)
+        if precio_float < 0:
+            return None
+        return precio_float
+    except (ValueError, TypeError):
+        return None
+    
+def validar_cantidad(cantidad):
+    try:
+        cantidad_int = int(cantidad)
+        if cantidad_int <= 0:
+            return None
+        return cantidad_int
+    except (ValueError, TypeError):
+        return None
