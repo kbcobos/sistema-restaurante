@@ -31,6 +31,8 @@ def guardar_usuarios():
         return False
     
 def registrar_usuario(nombre, mail, contrasena):
+    from validacion import validar_mail, validar_contrasena, validar_solo_letras, validar_datos_no_nulos
+
     datos = [nombre, mail, contrasena]
     if not validar_datos_no_nulos(datos):
         print("ERROR: Todos los campos son obligatorios")
@@ -70,7 +72,7 @@ def registrar_usuario(nombre, mail, contrasena):
         print(f"Error al registrar: {e}")
         return False
 
-def login_usuario():
+def login_usuario(usuario, contrasena):
     from validacion import validar_usuario_y_contrasena
 
     resultado = validar_usuario_y_contrasena(usuario, contrasena)
@@ -81,6 +83,122 @@ def login_usuario():
     
     print(f"¡Bienvenido {resultado['nombre']}!")
     return True
+
+def ver_menu_completo():
+    limpiar_pantalla()
+    print("=" * 60)
+    print("MENÚ DEL RESTAURANTE")
+    print("=" * 60)
+
+    try:
+        ruta = os.path.join(os.path.dirname(__file__), "menu.json")
+        with open(ruta, "r", encoding="utf-8") as f:
+            menu = json.load(f)
+
+        if not menu:
+            print("\nNo hay productos en el menú.")
+            pausar()
+            return
+        
+        categorias = {}
+        for producto in menu:
+            categoria = producto.get("categoria", "Sin categoria").title()
+            if categoria not in categorias:
+                categorias[categoria] = []
+            categorias[categoria].append(producto)
+
+        for categoria, productos in sorted(categorias.items()):
+            print(f"\n{categoria.upper()}")
+            print("-" * 60)
+            mostrar_tabla_productos(productos)
+
+    except FileNotFoundError:
+        print("\nNo se encontró el archivo del menú.")
+    except Exception as e:
+        print(f"\nError: {e}")
+
+def hacer_pedido(usuario_actual):
+    limpiar_pantalla()
+    print("=" * 60)
+    print("HACER PEDIDO")
+    print("=" * 60)
+
+    print("\nInformación del pedido")
+    bandera = True
+    mesa = None
+    while bandera:
+        mesa_input = input("Número de mesa (-1 para cancelar): ").strip()
+        if mesa_input == "-1":
+            print("Pedido cancelado.")
+            pausar()
+            return
+        
+        mesa = validacion.validar_mesa(mesa_input)
+        if mesa is None:
+            print("ERROR: El número de mesa debe ser un entero positivo.")
+            continue
+        bandera = False
+    
+    try:
+        ruta = os.path.join(os.path.dirname(__file__), "menu.json")
+        with open(ruta, "r", encoding="utf-8") as f:
+            menu = json.load(f)
+    except Exception as e:
+        print(f"Error al cargar el menú: {e}")
+        pausar()
+        return
+    
+    if not menu:
+        print("No hay productos disponibles.")
+        pausar()
+        return
+    
+    carrito = []
+
+    while True:
+        limpiar_pantalla()
+        print("=" * 60)
+        print(f"PEDIDO - Mesa {mesa}")
+        print("=" * 60)
+        print("\nMENU DISPONIBLE")
+        mostrar_tabla_productos(menu, mostrar_indices=True)
+
+        print("\n" + "=" * 60)
+        print("Opciones:")
+        print(" [Numero] - Agregar product al carrito")
+        print(" [V] - Ver carrito actual")
+        print(" [C] - Confirmar pedido")
+        print(" [X] - Cancelar pedido")
+        print("=" * 60)
+
+        opcion = input("\nSeleccione opcion: ").strip().upper()
+
+        if opcion == "X":
+            if validacion.confirmar_accion("cancelar el pedido"):
+                print("Pedido cancelado.")
+                pausar()
+                return
+        
+        elif opcion == "V":
+            if not carrito:
+                print("\nTu carrito esta vacio.")
+            else:
+                print(f"\n{'Cant':<6} {'Producto':<25} {'Precio':<10} {'Subtotal'}")
+                print("-" * 60)
+                total = 0
+                for item in carrito:
+                    subtotal = item['precio'] * item['cantidad']
+                    print(f"{item['cantidad']:<6} {item['Nombre']:<25} ${item['precio']:<9.2f} ${subtotal:.2f}")
+                    total += subtotal
+                print("-" * 60)
+                print(f"{'TOTAL:':<42} ${total:.2f}")
+            pausar()
+
+        elif opcion == "C":
+            if not carrito:
+                print("ERROR: El carrito esta vacio.")
+                pausar()
+                continue
 
 def menu_usuario(usuario_actual):
     cargar_usuarios()
