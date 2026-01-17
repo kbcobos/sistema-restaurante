@@ -251,6 +251,91 @@ def agregar_producto():
 
     pausar()
 
+def modificar_producto():
+    limpiar_pantalla()
+    print("=" * 60)
+    print("MODIFICAR PRODUCTO")
+    print("=" * 60)
+
+    if not menu_productos:
+        print("\nNo hay productos para modificar.")
+        pausar()
+        return
+    
+    mostrar_tabla_productos(menu_productos, mostrar_indices=True)
+
+    bandera = True
+    indice = None
+    while bandera:
+        opcion = input("\nNombre de producto (0 para cancelar): ").strip()
+        if opcion == "0" or opcion == "-1":
+            print("Operacion cancelada.")
+            pausar()
+            return
+        
+        try:
+            idx = int(opcion) - 1
+            if 0 <= idx < len(menu_productos):
+                indice = idx
+                bandera = False
+            else:
+                print("ERROR: Numero invalido.")
+        except ValueError:
+            print("ERROR: Debe ingresar un numero.")
+
+    producto = menu_productos[indice]
+
+    print(f"\nEditando: {producto['nombre']}")
+    print("(Presione Enter para mantener el valor actual)")
+
+    nuevo_nombre = input(f"Nombre [{producto['nombre']}]: ").strip()
+    if nuevo_nombre and validacion.validar_nombre_producto(nuevo_nombre):
+        producto['nombre'] = nuevo_nombre
+
+    print("Categoria: Entrada, Principal, Postre, Bebida")
+    nueva_categoria = input(f"Categoria[{producto['categoria']}]: ").strip()
+    if nueva_categoria and validacion.validar_categoria(nueva_categoria):
+        producto['categoria'] = nueva_categoria.title()
+
+    nuevo_precio_input = input(f"Precio [${producto['precio']:.2f}]: ").strip()
+    if nuevo_precio_input:
+        nuevo_precio = validacion.validar_precio(nuevo_precio_input)
+        if nuevo_precio is not None:
+            producto['precio'] = nuevo_precio
+
+    disponible_input = input(f"Disponible (s/n) [{'s' if producto.get('disponible', True) else 'n'}]: ").strip().lower()
+    if disponible_input in ['s', 'n']:
+        producto['disponible'] = (disponible_input == 's')
+
+    if validacion.confirmar_accion("guardar los cambios"):
+        guardar_datos()
+        print("\nProducto actualizado exitosamente.")
+    else:
+        print("\nCambios descartados.")
+
+    pausar()
+
+def eliminar_producto():
+    limpiar_pantalla()
+    print("=" * 60)
+    print("ELIMINAR PRODUCTO")
+    print("=" * 60)
+
+    if not menu_productos:
+        print("\nNo hay productos para eliminar.")
+        pausar()
+        return
+    
+    mostrar_tabla_productos(menu_productos, mostrar_indices=True)
+
+    bandera = True
+    while bandera:
+        opcion = input("\nNumero de producto (0 para cancelar): ").strip()
+        if opcion == "0" or opcion == "-1":
+            print("Operación cancelada.")
+            pausar()
+            return
+
 def login_admin_menu():
     cargar_datos()
 
