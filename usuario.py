@@ -200,6 +200,138 @@ def hacer_pedido(usuario_actual):
                 pausar()
                 continue
 
+            total = sum(item['precio'] * item['cantidad'] for item in carrito)
+            print(f"\nTotal a pagar: ${total:.2f}")
+
+            if validacion.confirmar_accion("Confirmar el pedido"):
+                pedido_id = datetime.now().strftime("%Y%m%d%H%M%S")
+                pedido = {
+                    'id': pedido_id,
+                    'fecha': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    'usuario': usuario_actual,
+                    'mesa': mesa,
+                    'productos': carrito.copy(),
+                    'total': total,
+                    'estado': 'Pendiente'
+                }
+
+                try:
+                    ruta_pedidos = os.path.join(os.path.dirname(__file__), "pedidos.json")
+                    try:
+                        with open(ruta_pedidos, "r", encoding="utf-8") as f:
+                            pedidos = json.load(f)
+                    except FileNotFoundError:
+                        pedidos = []
+                    
+                    pedidos.append(pedido)
+
+                    with open(ruta_pedidos, "w", encoding="utf-8") as f:
+                        json.dump(pedidos, f, indent=4, ensure_ascii=False)
+
+                    if usuario_actual in usuarios:
+                        usuarios[usuario_actual]['pedidos'].append(pedido_id)
+                        guardar_usuarios()
+
+                    from datos import generar_ticket_txt
+                    generar_ticket_txt(pedido)
+
+                    print("¡Pedido confirmado!")
+                    print(f"Numero de pedido: {pedido_id}")
+                    print(f"Total a pagar: ${total:.2f}")
+                    print("Se ha generado un ticket de su pedido.")
+                    pausar()
+                    return
+                
+                except Exception as e:
+                    print(f"Error al guardar el pedido: {e}")
+                    pausar()
+                    return
+                
+            else:
+                try:
+                    indice = int(opcion) - 1
+                    if 0 <= indice < len(menu):
+                        producto = menu[indice]
+
+                        bandera = True
+                        cantidad = None
+                        while bandera:
+                            cantidad_input = input(f"Cantidad de '{producto['Nombre']}' (-1 para cancelar): ").strip()
+                            if cantidad_input == "-1":
+                                break
+                            
+                            cantidad = validacion.validar_cantidad(cantidad_input)
+                            if cantidad is None:
+                                print("ERROR: La cantidad debe ser un entero positivo.")
+                                continue
+                            bandera = False
+
+                        if cantidad is None:
+                            continue
+
+                        encontrado = False
+                        for item in carrito:
+                            if item['id'] == producto['id']:
+                                item['cantidad'] += cantidad
+                                encontrado = True
+                                break
+                        
+                        if not encontrado:
+                            carrito.append({
+                                'id': producto['id'],
+                                'Nombre': producto['Nombre'],
+                                'precio': producto['Precio'],
+                                'cantidad': cantidad
+                            })
+
+                        subtotal = producto['precio'] * cantidad
+                        print(f"\n{cantidad} x {producto['nombre']} agregado ${subtotal:.2f}")
+                        pausar()
+
+                    else:
+                        print("ERROR: Producto no encontrado.")
+                        pausar()
+
+                except ValueError:
+                    print("ERROR: Opción inválida.")
+                    pausar()
+
+def ver_mis_pedidos(usuario_actual):
+    limpiar_pantalla()
+    print("=" * 60)
+    print("MIS PEDIDOS")
+    print("=" * 60)
+
+    try:
+        ruta = os.path.join(os.path.dirname(__file__), "pedidos.json")
+        with open(ruta, "r", encoding="utf-8") as f:
+            todos_pedidos = json.load(f)
+
+        mis_pedidos = [p for p in todos_pedidos if p['usuario'] == usuario_actual]
+
+        if not mis_pedidos:
+            print("\nNo tienes pedidos realizados.")
+        else:
+            for pedido in mis_pedidos:
+                print(f"\nPedido #{pedido['id']}")
+                print(f"Fecha: {pedido['fecha']}")
+                print(f"Mesa: {pedido['mesa']}")
+                print(f"Estado: {pedido['estado']}")
+                print(f"Total: ${pedido['total']:.2f}")
+                print("     Productos:")
+                for prod in pedido['productos']:
+                    print(f"      - {prod['cantidad']} x {prod['nombre']} (${prod['precio']:.2f})")
+                print("-" * 60)
+
+            print(f"\nTotal de pedidos: {len(mis_pedidos)}")
+        
+    except FileNotFoundError:
+        print("\nNo hay pedidos registrados.")
+    except Exception as e:
+        print(f"\nError: {e}")
+    
+    pausar()
+
 def menu_usuario(usuario_actual):
     cargar_usuarios()
 
