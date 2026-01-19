@@ -7,8 +7,7 @@ ruta_pedidos = os.path.join(os.path.dirname(__file__), "pedidos.json")
 ruta_admins = os.path.join(os.path.dirname(__file__), "admins.json")
 
 def validar_mail(mail):
-
-    dominios = ["gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "gmail.com.ar", "hotmail.com.ar"]
+    dominios = ["gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "gmail.com.ar", "hotmail.com.ar", "pizzeriaespacial.com"]
 
     if not mail or "@" not in mail:
         return False
@@ -24,7 +23,7 @@ def validar_mail(mail):
         return False
     
     return True
-    
+
 def validar_contrasena(contrasena):
 
     caracteres_minimos = 5
@@ -48,7 +47,7 @@ def validar_solo_letras(texto):
             continue
         else:
             return False
-        
+
     return tiene_letra
 
 def validar_datos_no_nulos(datos):
@@ -71,7 +70,7 @@ def validar_numero_positivo(valor):
         return numero
     except (ValueError, AttributeError):
         return None
-    
+
 def validar_mesa(mesa):
     try:
         numero_mesa = int(mesa)
@@ -80,7 +79,7 @@ def validar_mesa(mesa):
         return numero_mesa
     except (ValueError, TypeError):
         return None
-    
+
 def validar_usuario_y_contrasena(usuario, contrasena):
     try:
         usuario = usuario.strip().lower() if usuario else ""
@@ -89,31 +88,31 @@ def validar_usuario_y_contrasena(usuario, contrasena):
         if not usuario or not contrasena:
             return None
         
-        with open(ruta_usuarios, "r", enconding="utf-8") as archivo:
+        with open(ruta_usuarios, "r", encoding="utf-8") as archivo:
             usuarios = json.load(archivo)
 
-        usuairo_encontrado = None
+        usuario_encontrado = None
         for usuario_key in usuarios.keys():
             if usuario_key.lower() == usuario:
-                usuairo_encontrado = usuario_key
+                usuario_encontrado = usuario_key
                 break
 
-        if usuairo_encontrado is None:
+        if usuario_encontrado is None:
             return None
         
-        contrasena_guardada = usuarios[usuairo_encontrado].get("contraseña")
+        contrasena_guardada = usuarios[usuario_encontrado].get("contraseña")
 
         if contrasena_guardada == contrasena:
-            return usuarios[usuairo_encontrado]
+            return usuarios[usuario_encontrado]
         
         return None
     
-    except FileExistsError:
+    except FileNotFoundError:
         return None
     except Exception as e:
         print(f"ERROR: {e}")
         return None
-    
+
 def validar_admin_y_contrasena(usuario, contrasena):
     try:
         usuario = usuario.strip().lower() if usuario else ""
@@ -166,7 +165,7 @@ def validar_producto_existente(producto_id, menu_dict=None):
     except Exception as e:
         print(f"ERROR: {e}")
         return False
-    
+
 def validar_pedido_existente(pedido_id, pedidos_dict=None):
     try:
         if pedidos_dict is not None:
@@ -175,18 +174,18 @@ def validar_pedido_existente(pedido_id, pedidos_dict=None):
             with open(ruta_pedidos, "r", encoding="utf-8") as archivo:
                 pedidos = json.load(archivo)
 
-            for pedido in pedidos:
-                if pedido.get("id") == pedido_id:
-                    return True
-            
-            return False
-        
+        for pedido in pedidos:
+            if pedido.get("id") == pedido_id:
+                return True
+
+        return False
+
     except FileNotFoundError:
         return False
     except Exception as e:
         print(f"ERROR: {e}")
         return False
-    
+
 def validar_usuario_registrado(usuario):
     try:
         usuario_normalizado = usuario.strip().lower() if usuario else ""
@@ -205,7 +204,7 @@ def validar_usuario_registrado(usuario):
     except Exception as e:
         print(f"ERROR: {e}")
         return False
-    
+
 def confirmar_accion(accion):
     print(f"Confirma que desea {accion}? (S/N): ", end="")
     respuesta = input().strip().upper()
@@ -214,7 +213,7 @@ def confirmar_accion(accion):
         print("Respuesta invalida. Ingrese 'S' para Si o 'N' para No.")
         print("Confirma? (S/N): ", end="")
         respuesta = input().strip().upper()
-    
+
     return respuesta == "S"
 
 def validar_categoria(categoria):
@@ -227,8 +226,7 @@ def validar_categoria(categoria):
     return categoria.strip().lower() in categorias_validas
 
 def validar_estado_pedido(estado):
-
-    estados_validos = ["pendiente", "en preparación", "listo", "entregado", "cancelado"]
+    estados_validos = ["pendiente", "en preparacion", "listo", "entregado", "cancelado"]
 
     if not estado:
         return False
@@ -236,13 +234,13 @@ def validar_estado_pedido(estado):
     return estado.strip().lower() in estados_validos
 
 def manejar_entrada_invalida(entrada):
-    print(f"ERROR: Entrada invalida: '{entrada}'. Por favor, intentelo nuevamente")
+    print(f"ERROR: Entrada invalida: '{entrada}'. Por favor, intentelo nuevamente.")
 
 def verificar_usuario_registrado(usuario):
     return validar_usuario_registrado(usuario)
 
 def validar_nombre_producto(nombre):
-    if not nombre or not nombre.strio():
+    if not nombre or not nombre.strip():
         return False
     
     nombre_limpio = nombre.strip()
@@ -265,7 +263,7 @@ def validar_precio(precio):
         return precio_float
     except (ValueError, TypeError):
         return None
-    
+
 def validar_cantidad(cantidad):
     try:
         cantidad_int = int(cantidad)
