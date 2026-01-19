@@ -1,0 +1,82 @@
+[
+    {
+        "id": "PROD001",
+        "nombre": "Pizza Margarita",
+        "categoria": "Principal",
+        "precio": 22000.0,
+        "descripcion": "Salsa de tomate, mozzarella, albahaca",
+        "disponible": true
+    },
+    {
+        "id": "PROD002",
+        "nombre": "Pizza Pepperoni",
+        "categoria": "Principal",
+        "precio": 24000.0,
+        "descripcion": "Salsa de tomate, mozzarella, pepperoni",
+        "disponible": true
+    },
+    {
+        "id": "PROD003",
+        "nombre": "Pizza Cuatro Quesos",
+        "categoria": "Principal",
+        "precio": 25000.0,
+        "descripcion": "Mozzarella, parmesano, gorgonzola, provolone",
+        "disponible": true
+    },
+    {
+        "id": "PROD004",
+        "nombre": "Ensalada Cesar",
+        "categoria": "Entrada",
+        "precio": 16000.5,
+        "descripcion": "Lechuga, crutones, parmesano, aderezo cesar",
+        "disponible": true
+    },
+    {
+        "id": "PROD005",
+        "nombre": "Pan de Ajo",
+        "categoria": "Entrada",
+        "precio": 4000.0,
+        "descripcion": "Pan con mantequilla de ajo y hierbas",
+        "disponible": true
+    },
+    {
+        "id": "PROD006",
+        "nombre": "Tiramisu",
+        "categoria": "Postre",
+        "precio": 5000.5,
+        "descripcion": "Postre italiano con cafe y mascarpone",
+        "disponible": true
+    },
+    {
+        "id": "PROD007",
+        "nombre": "Helado de Vainilla",
+        "categoria": "Postre",
+        "precio": 3000.5,
+        "descripcion": "Tres bolas de helado",
+        "disponible": true
+    },
+    {
+        "id": "PROD008",
+        "nombre": "Coca Cola",
+        "categoria": "Bebida",
+        "precio": 2500.5,
+        "descripcion": "Bebida gaseosa 500ml",
+        "disponible": true
+    },
+    {
+        "id": "PROD009",
+        "nombre": "Agua Mineral",
+        "categoria": "Bebida",
+        "precio": 1500.5,
+        "descripcion": "Agua sin gas 500ml",
+        "disponible": true
+    },
+    {
+        "id": "PROD010",
+        "nombre": "Limonada",
+        "categoria": "Bebida",
+        "precio": 3000.0,
+        "descripcion": "Limonada natural 500ml",
+        "disponible": true
+    }
+]

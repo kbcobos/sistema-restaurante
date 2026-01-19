@@ -1,0 +1,16 @@
+{
+    "nacho@gmail.com": {
+        "nombre": "Nacho",
+        "mail": "nacho@gmail.com",
+        "contraseña": "12345",
+        "pedidos": [
+            "20260119165858"
+        ]
+    },
+    "bruno@gmail.com": {
+        "nombre": "Bruno",
+        "mail": "bruno@gmail.com",
+        "contraseña": "12345",
+        "pedidos": []
+    }
+}

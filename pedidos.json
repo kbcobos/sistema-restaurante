@@ -1,0 +1,24 @@
+[
+    {
+        "id": "20260119165858",
+        "fecha": "2026-01-19 16:58:58",
+        "usuario": "nacho@gmail.com",
+        "mesa": 5,
+        "productos": [
+            {
+                "id": "PROD001",
+                "nombre": "Pizza Margarita",
+                "precio": 22000.0,
+                "cantidad": 2
+            },
+            {
+                "id": "PROD008",
+                "nombre": "Coca Cola",
+                "precio": 2500.5,
+                "cantidad": 2
+            }
+        ],
+        "total": 49001.0,
+        "estado": "Pendiente"
+    }
+]

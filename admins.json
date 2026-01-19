@@ -1,0 +1,14 @@
+{
+    "admin": {
+        "Contraseña": "admin123",
+        "Mail": "admin@pizzeriaespacial.com",
+        "Nombre": "Admin",
+        "Apellido": "Sistema"
+    },
+    "admin2": {
+        "Contraseña": "admin456",
+        "Mail": "admin2@pizzeriaespacial.com",
+        "Nombre": "Gaston",
+        "Apellido": "Diaz"
+    }
+}
