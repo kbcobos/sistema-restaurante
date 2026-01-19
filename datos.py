@@ -16,10 +16,10 @@ def inicializar_archivos():
     try:
         if not os.path.exists(CARPETA_TICKETS):
             os.makedirs(CARPETA_TICKETS)
-
+        
         if not os.path.exists(CARPETA_REPORTES):
             os.makedirs(CARPETA_REPORTES)
-
+        
         if not os.path.exists(ARCHIVO_MENU):
             menu_inicial = [
                 {
@@ -27,7 +27,7 @@ def inicializar_archivos():
                     'nombre': 'Pizza Margarita',
                     'categoria': 'Principal',
                     'precio': 22000.00,
-                    'desprecion': 'Salsa de tomate, mozzarrella, albahaca',
+                    'descripcion': 'Salsa de tomate, mozzarella, albahaca',
                     'disponible': True
                 },
                 {
@@ -35,7 +35,7 @@ def inicializar_archivos():
                     'nombre': 'Pizza Pepperoni',
                     'categoria': 'Principal',
                     'precio': 24000.00,
-                    'desprecion': 'Salsa de tomate, mozzarrella, pepperoni',
+                    'descripcion': 'Salsa de tomate, mozzarella, pepperoni',
                     'disponible': True
                 },
                 {
@@ -43,7 +43,7 @@ def inicializar_archivos():
                     'nombre': 'Pizza Cuatro Quesos',
                     'categoria': 'Principal',
                     'precio': 25000.00,
-                    'desprecion': 'Mozzarella, parmesano, gorgonzola, provolone',
+                    'descripcion': 'Mozzarella, parmesano, gorgonzola, provolone',
                     'disponible': True
                 },
                 {
@@ -51,7 +51,7 @@ def inicializar_archivos():
                     'nombre': 'Ensalada Cesar',
                     'categoria': 'Entrada',
                     'precio': 16000.50,
-                    'desprecion': 'Lechuga, crutones, parmesano, aderezo cesar',
+                    'descripcion': 'Lechuga, crutones, parmesano, aderezo cesar',
                     'disponible': True
                 },
                 {
@@ -59,7 +59,7 @@ def inicializar_archivos():
                     'nombre': 'Pan de Ajo',
                     'categoria': 'Entrada',
                     'precio': 4000.00,
-                    'desprecion': 'Pan con mantequilla de ajo y hierbas',
+                    'descripcion': 'Pan con mantequilla de ajo y hierbas',
                     'disponible': True
                 },
                 {
@@ -67,7 +67,7 @@ def inicializar_archivos():
                     'nombre': 'Tiramisu',
                     'categoria': 'Postre',
                     'precio': 5000.50,
-                    'desprecion': 'Postre italiano con cafe y mascarpone',
+                    'descripcion': 'Postre italiano con cafe y mascarpone',
                     'disponible': True
                 },
                 {
@@ -75,7 +75,7 @@ def inicializar_archivos():
                     'nombre': 'Helado de Vainilla',
                     'categoria': 'Postre',
                     'precio': 3000.50,
-                    'desprecion': 'Tres bolas de helado',
+                    'descripcion': 'Tres bolas de helado',
                     'disponible': True
                 },
                 {
@@ -83,7 +83,7 @@ def inicializar_archivos():
                     'nombre': 'Coca Cola',
                     'categoria': 'Bebida',
                     'precio': 2500.50,
-                    'desprecion': 'Bebida gaseosa 500ml',
+                    'descripcion': 'Bebida gaseosa 500ml',
                     'disponible': True
                 },
                 {
@@ -91,7 +91,7 @@ def inicializar_archivos():
                     'nombre': 'Agua Mineral',
                     'categoria': 'Bebida',
                     'precio': 1500.50,
-                    'desprecion': 'Agua sin gas 500ml',
+                    'descripcion': 'Agua sin gas 500ml',
                     'disponible': True
                 },
                 {
@@ -99,14 +99,14 @@ def inicializar_archivos():
                     'nombre': 'Limonada',
                     'categoria': 'Bebida',
                     'precio': 3000.00,
-                    'desprecion': 'Limonada natural 500ml',
+                    'descripcion': 'Limonada natural 500ml',
                     'disponible': True
                 }
             ]
             
             with open(ARCHIVO_MENU, 'w', encoding='utf-8') as archivo:
                 json.dump(menu_inicial, archivo, indent=4, ensure_ascii=False)
-            
+        
         if not os.path.exists(ARCHIVO_PEDIDOS):
             with open(ARCHIVO_PEDIDOS, 'w', encoding='utf-8') as archivo:
                 json.dump([], archivo, indent=4, ensure_ascii=False)
@@ -124,13 +124,13 @@ def inicializar_archivos():
                     "Apellido": "Sistema"
                 }
             }
-            with open(ARCHIVO_ADMINS, 'w', encoding="utf-8") as archivo:
+            with open(ARCHIVO_ADMINS, 'w', encoding='utf-8') as archivo:
                 json.dump(admins_inicial, archivo, indent=4, ensure_ascii=False)
         
         return True
     
     except Exception as e:
-        print(f"Error al inicializara archivos: {e}")
+        print(f"Error al inicializar archivos: {e}")
         return False
 
 def cargar_menu():
@@ -154,7 +154,7 @@ def guardar_menu(menu):
     except Exception as e:
         print(f"Error al guardar menú: {e}")
         return False
-    
+
 def cargar_pedidos():
     try:
         with open(ARCHIVO_PEDIDOS, 'r', encoding='utf-8') as archivo:
@@ -167,7 +167,7 @@ def cargar_pedidos():
     except Exception as e:
         print(f"Error al cargar pedidos: {e}")
         return []
-    
+
 def guardar_pedidos(pedidos):
     try:
         with open(ARCHIVO_PEDIDOS, 'w', encoding='utf-8') as archivo:
@@ -176,7 +176,7 @@ def guardar_pedidos(pedidos):
     except Exception as e:
         print(f"Error al guardar pedidos: {e}")
         return False
-    
+
 def guardar_pedido(pedido):
     try:
         pedidos = cargar_pedidos()
@@ -198,7 +198,7 @@ def cargar_usuarios():
     except Exception as e:
         print(f"Error al cargar usuarios: {e}")
         return {}
-    
+
 def guardar_usuarios(usuarios):
     try:
         with open(ARCHIVO_USUARIOS, 'w', encoding='utf-8') as archivo:
@@ -233,109 +233,112 @@ def guardar_admins(admins):
 def generar_ticket_txt(pedido):
     try:
         nombre_archivo = f"{CARPETA_TICKETS}/ticket_{pedido['id']}.txt"
-
+        
         with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
             archivo.write("=" * 60 + "\n")
-            archivo.write(f"    RESTAURANTE {NOMBRE_RESTAURANTE}\n")
+            archivo.write(f"     RESTAURANTE {NOMBRE_RESTAURANTE}\n")
             archivo.write("=" * 60 + "\n\n")
-
+            
             archivo.write(f"TICKET DE PEDIDO\n")
             archivo.write(f"Numero: {pedido['id']}\n")
             archivo.write(f"Fecha: {pedido['fecha']}\n")
-            archivo.write(f"-" * 60 + "\n\n")
-
+            archivo.write("-" * 60 + "\n\n")
+            
             archivo.write(f"Cliente: {pedido['nombre']}\n")
             archivo.write(f"Mesa: {pedido['mesa']}\n")
             archivo.write(f"Estado: {pedido['estado']}\n")
-            archivo.write(f"-" * 60 + "\n\n")
-
-            archivo.write(f"DETALLE DEL PEDIDO\n")
-            archivo.write(f"-" * 60 + "\n")
+            archivo.write("-" * 60 + "\n\n")
+            
+            archivo.write("DETALLE DEL PEDIDO\n")
+            archivo.write("-" * 60 + "\n")
             archivo.write(f"{'Producto':<30} {'Cant':<6} {'Precio':<10} {'Subtotal'}\n")
-            archivo.write(f"-" * 60 + "\n")
-
+            archivo.write("-" * 60 + "\n")
+            
             for item in pedido['productos']:
-                archivo.write(f"{item['nombre']:<30} {item['cantidad']:6} ${item['pedido']:<9.2f} ${item['subtotal']:.2f}\n")
-
+                archivo.write(f"{item['nombre']:<30} {item['cantidad']:<6} ${item['precio']:<9.2f} ${item['subtotal']:.2f}\n")
+            
             archivo.write("-" * 60 + "\n")
             archivo.write(f"{'TOTAL:':<46} ${pedido['total']:.2f}\n")
             archivo.write("=" * 60 + "\n\n")
-
+            
             archivo.write("Gracias por su compra!\n")
             archivo.write("Esperamos verlo pronto nuevamente.\n")
             archivo.write("=" * 60 + "\n")
-
+        
         return True
     
     except Exception as e:
         print(f"Error al generar ticket: {e}")
         return False
-    
+
 def exportar_reporte_txt():
     try:
         pedidos = cargar_pedidos()
         menu = cargar_menu()
-
+        
         fecha_actual = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         nombre_archivo = f"{CARPETA_REPORTES}/reporte_ventas_{fecha_actual}.txt"
-
+        
         with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
             archivo.write("=" * 80 + "\n")
             archivo.write(f"REPORTE DE VENTAS - RESTAURANTE {NOMBRE_RESTAURANTE}\n")
             archivo.write("=" * 80 + "\n\n")
-
+            
+            archivo.write(f"Fecha de generacion: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            archivo.write("-" * 80 + "\n\n")
+            
             archivo.write("MENU ACTUAL\n")
             archivo.write("-" * 80 + "\n")
             archivo.write(f"Total de productos: {len(menu)}\n\n")
-
+            
             categorias = {}
             for producto in menu:
-                cat = producto.get('categoria', 'Sin categoria')
+                cat = producto.get('categoria', 'Sin categoría')
                 if cat not in categorias:
                     categorias[cat] = []
                 categorias[cat].append(producto)
-
+            
             for categoria, productos in categorias.items():
                 archivo.write(f"\n{categoria.upper()}\n")
                 for producto in productos:
                     disponible = "SI" if producto.get('disponible', True) else "NO"
-                    archivo.write(f"    - {producto['nombre']} - ${producto['precio']:.2f} Disponible: {disponible}\n")
+                    archivo.write(f"  - {producto['nombre']} - ${producto['precio']:.2f} Disponible: {disponible}\n")
             
             archivo.write("\n" + "=" * 80 + "\n\n")
-
+            
             archivo.write("HISTORIAL DE PEDIDOS\n")
             archivo.write("-" * 80 + "\n")
             archivo.write(f"Total de pedidos: {len(pedidos)}\n\n")
-
+            
             if pedidos:
                 total_ventas = sum(p['total'] for p in pedidos)
                 promedio_venta = total_ventas / len(pedidos)
-
+                
                 archivo.write(f"RESUMEN FINANCIERO\n")
-                archivo.write(f"    Total de ventas: ${total_ventas:.2f}\n")
-                archivo.write(f"    Promedio por pedido: ${promedio_venta:.2f}\n\n")
-
+                archivo.write(f"  Total de ventas: ${total_ventas:.2f}\n")
+                archivo.write(f"  Promedio por pedido: ${promedio_venta:.2f}\n\n")
+                
                 archivo.write(f"PEDIDOS POR ESTADO\n")
                 estados = {}
                 for pedido in pedidos:
                     estado = pedido['estado']
                     estados[estado] = estados.get(estado, 0) + 1
-
+                
                 for estado, cantidad in estados.items():
-                    archivo.write(f"    {estado}: {cantidad} pedidos\n")
-
+                    archivo.write(f"  {estado}: {cantidad} pedidos\n")
+                
                 archivo.write("\n")
-
+                
                 archivo.write(f"PRODUCTOS MAS VENDIDOS\n")
                 productos_vendidos = {}
                 ingresos_por_producto = {}
-
+                
                 for pedido in pedidos:
                     for item in pedido['productos']:
                         nombre = item['nombre']
                         cantidad = item['cantidad']
                         subtotal = item['subtotal']
-
+                        
                         if nombre in productos_vendidos:
                             productos_vendidos[nombre] += cantidad
                             ingresos_por_producto[nombre] += subtotal
@@ -344,38 +347,38 @@ def exportar_reporte_txt():
                             ingresos_por_producto[nombre] = subtotal
                 
                 top_productos = sorted(productos_vendidos.items(), key=lambda x: x[1], reverse=True)[:10]
-
+                
                 for i, (producto, cantidad) in enumerate(top_productos, 1):
                     ingreso = ingresos_por_producto[producto]
-                    archivo.write(f"    {i}. {producto} - {cantidad} unidades (${ingreso:.2f})\n")
-
+                    archivo.write(f"  {i}. {producto} - {cantidad} unidades (${ingreso:.2f})\n")
+                
                 archivo.write("\n" + "-" * 80 + "\n\n")
-
+                
                 archivo.write(f"DETALLE DE TODOS LOS PEDIDOS\n")
                 archivo.write("-" * 80 + "\n\n")
-
+                
                 for i, pedido in enumerate(pedidos, 1):
                     archivo.write(f"Pedido #{i} - ID: {pedido['id']}\n")
-                    archivo.write(f"    Cliente: {pedido['nombre']} | Mesa: {pedido['mesa']}\n")
-                    archivo.write(f"    Fecha: {pedido['fecha']}\n")
-                    archivo.write(f"    Estado: {pedido['estado']}\n")
-                    archivo.write(f"    Total: {pedido['total']:.2f}\n")
-                    archivo.write(f"    Productos:\n")
+                    archivo.write(f"  Cliente: {pedido['nombre']} | Mesa: {pedido['mesa']}\n")
+                    archivo.write(f"  Fecha: {pedido['fecha']}\n")
+                    archivo.write(f"  Estado: {pedido['estado']}\n")
+                    archivo.write(f"  Total: ${pedido['total']:.2f}\n")
+                    archivo.write(f"  Productos:\n")
                     for item in pedido['productos']:
                         archivo.write(f"    - {item['nombre']} x{item['cantidad']} (${item['subtotal']:.2f})\n")
                     archivo.write("\n")
-                
-                archivo.write("=" * 80 + "\n")
-                archivo.write("Fin del reporte\n")
-                archivo.write("=" * 80 + "\n")
-
-            nombre_fijo = f"{CARPETA_REPORTES}/reporte_ventas.txt"
-            with open(nombre_archivo, 'r', encoding='utf-8') as origen:
-                with open(nombre_fijo, 'w', encoding='utf-8') as destino:
-                    destino.write(origen.read())
-
-            return True
+            
+            archivo.write("=" * 80 + "\n")
+            archivo.write("Fin del reporte\n")
+            archivo.write("=" * 80 + "\n")
         
+        nombre_fijo = f"{CARPETA_REPORTES}/reporte_ventas.txt"
+        with open(nombre_archivo, 'r', encoding='utf-8') as origen:
+            with open(nombre_fijo, 'w', encoding='utf-8') as destino:
+                destino.write(origen.read())
+        
+        return True
+    
     except Exception as e:
         print(f"Error al exportar reporte: {e}")
         return False
