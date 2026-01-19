@@ -12,7 +12,7 @@ def limpiar_pantalla():
 
 def pausar():
     try:
-        input("\n Presione Enter para continuar...")
+        input("\nPresione Enter para continuar...")
     except KeyboardInterrupt:
         print("\n")
 
@@ -39,27 +39,27 @@ def validar_numero_positivo(mensaje, tipo=int):
             if valor > 0:
                 return valor
             else:
-                print("El valor debe ser mayor a 0")
+                print("ERROR: El valor debe ser mayor a 0")
         except ValueError:
-            print(f"Debe ingresar un numero valido")
+            print(f"ERROR: Debe ingresar un numero valido")
         except KeyboardInterrupt:
             print("\n")
             return None
-        
-def confirmar_accion(mensaje="¿Está seguro?"):
+
+def confirmar_accion(mensaje="Esta seguro?"):
     try:
         respuesta = input(f"{mensaje} (s/n): ").strip().lower()
-        return respuesta == 's' or respuesta == 'si' or respuesta == 'sí'
+        return respuesta == 's' or respuesta == 'si'
     except KeyboardInterrupt:
         print("\n")
         return False
-    
+
 def formatear_precio(precio):
     try:
         return f"${float(precio):.2f}"
     except (ValueError, TypeError):
         return "$0.00"
-    
+
 def calcular_total_carrito(carrito):
     try:
         return sum(item.get('subtotal', 0) for item in carrito)
@@ -68,22 +68,22 @@ def calcular_total_carrito(carrito):
 
 def obtener_fecha_hora_actual():
     from datetime import datetime
-    return datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 def validar_opcion_menu(opcion, opciones_validas):
     return opcion in opciones_validas
 
 def mostrar_mensaje_error(mensaje):
-    print(f"\n ERROR: {mensaje}")
+    print(f"\nERROR: {mensaje}")
 
 def mostrar_mensaje_exito(mensaje):
-    print(f"\n EXITO: {mensaje}")
+    print(f"\nEXITO: {mensaje}")
 
-def mostrar_mensaje_adventencia(mensaje):
-    print(f"\n ADVENTENCIA: {mensaje}")
+def mostrar_mensaje_advertencia(mensaje):
+    print(f"\nADVERTENCIA: {mensaje}")
 
 def mostrar_mensaje_info(mensaje):
-    print(f"\n INFO: {mensaje}")
+    print(f"\nINFO: {mensaje}")
 
 def centrar_texto(texto, ancho=60, caracter=' '):
     return texto.center(ancho, caracter)
@@ -102,18 +102,18 @@ def validar_string_no_vacio(mensaje):
             valor = input(mensaje).strip()
             if valor:
                 return valor
-            print("Este campo no puede estar vacio")
+            print("ERROR: Este campo no puede estar vacio")
     except KeyboardInterrupt:
         print("\n")
         return None
-    
+
 def mostrar_barra_progreso(actual, total, longitud=40):
     try:
         porcentaje = int((actual / total) * 100)
-        lleno = int((longitud * actual)/total)
+        lleno = int((longitud * actual) / total)
         barra = '#' * lleno + '-' * (longitud - lleno)
         print(f'\r|{barra}| {porcentaje}%', end='')
-
+        
         if actual >= total:
             print()
     except Exception:
