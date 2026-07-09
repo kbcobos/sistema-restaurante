@@ -1,2 +1,8 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+*.json
+
+tickets/
+reportes/
+
+__pycache__/
+*.py[cod]
+*$py.class
